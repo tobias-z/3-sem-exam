@@ -1,0 +1,24 @@
+{
+  "name": "startcode",
+  "version": "1.0.0",
+  "description": "Startcode for Tobias Z exam 3 semester",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobias-z/3-sem-startcode.git"
+  },
+  "keywords": [],
+  "author": "Tobias Zimmermann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tobias-z/3-sem-startcode/issues"
+  },
+  "homepage": "https://github.com/tobias-z/3-sem-startcode#readme",
+  "devDependencies": {
+    "husky": "^6.0.0"
+  }
+}

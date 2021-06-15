@@ -1,0 +1,81 @@
+env:
+  global:
+    secure: Rw2Sa1iZYGYik+9nD096UdgFWc2UV4oHVPCLdL7O2tt66Q6mL3D6AHLCM191q8F5R0IVEtwFJ7EyF5wwnV3j4u2/8F5Z5Z3Q310o1cAXai/xdR/qGsI91gJm6gL046dgHSeNBrGib8F5jASxpBU03EahlfqMllQ0olkRlWGueyUayewzdMHKVkO93MLWX+AHEje2Ux22pPiyw4aXCrFHmmX059GXiw+SEHseuh/bkE7AlpyLMwJszm2LhDkS1L5Q2IzoAX9sKf+QTkfJ1IIKA+i3bASuVvR5ZMFnrSqq/cF/YZafCJctElrzFFCjGYky4cb45EG8tPEFnR4L0kPr4HVHXtkt99lGTuTQv/ElolEds8M1xSeSJWIvgOa0tpIC+2Qag9lqPTS8S7+Rm6qLJGxPqK7xupi1dpOJKFitN6NcSq/uATweT+LtGwQEO9aoWS9VXBkBSqwC1mC3y8oXvOQZmEVWoT3XXMJNHymqEd8oFmqGSsyI88Xx9SKlrkHsr5VNX/YYkfd7gkf22ODDeao85pawP+rawsMMpEbPtFkZ1WeyMiJDiuk7pZjBH+ePq3Dxphh9rKTDn3dr+l/Xqy5/remoUYHwzMQmsKfRhIoOdOVRO/kF4syjTcLrBdlL0kHw/7R6ZEPe6/CbneyJZLPw7EOHEAX4VdJjq0DAKjU=
+
+stages:
+  - compile
+  - test
+  - deploy-server
+  - deploy-client
+
+dist: bionic
+
+cache:
+  directories:
+    - "$HOME/.m2"
+
+jobs:
+  include:
+    - stage: compile
+      name: Compile
+      language: java
+
+      script:
+        - cd server
+        - mvn compile
+
+    - stage: test
+      name: All Tests
+      language: java
+
+      services:
+        - mysql
+
+      before_script:
+        - sudo apt-get update || true
+        - sudo apt-get install -y debconf-utils
+        - sudo debconf-set-selections <<< 'mysql-apt-config
+          mysql-apt-config/select-server select mysql-8.0'
+        - wget https://dev.mysql.com/get/mysql-apt-config_0.8.13-1_all.deb
+        - sudo -E dpkg -i mysql-apt-config_0.8.13-1_all.deb
+        - sudo apt-get update || true
+        - echo "Installing MySQL 8..."
+        - sudo -E apt-get -y install mysql-server
+        - sudo mysql -u root -e "CREATE User 'dev'@'localhost' IDENTIFIED BY
+          'ax2'; GRANT ALL PRIVILEGES ON *.* TO 'dev'@'localhost' WITH GRANT
+          OPTION;"
+        - sudo mysql -u dev -pax2 -e "CREATE DATABASE startcode_test;"
+        - mysql --version
+        - echo "before_script Complete"
+
+      script:
+        - cd server
+        - mvn test
+
+    - stage: deploy-server
+      if: branch = master || branch = main
+      name: DeployServer
+      language: java
+
+      script:
+        - sh deploy.server.sh
+
+    - stage: deploy-client
+      if: branch = master || branch = main
+      name: DeployClient
+      language: node_js
+
+      node_js:
+        - 14.15.1
+
+      before_script:
+        - openssl aes-256-cbc -K $encrypted_dfdcfd5172af_key -iv
+          $encrypted_dfdcfd5172af_iv -in deploy_key.enc -out ./deploy_key -d
+        - eval "$(ssh-agent -s)"
+        - chmod 600 ./deploy_key
+        - echo -e "Host $SERVER_IP_ADDRESS\n\tStrictHostKeyChecking no\n" >>
+          ~/.ssh/config
+        - ssh-add ./deploy_key
+
+      script:
+        - sh deploy.client.sh
