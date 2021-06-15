@@ -1,8 +1,3 @@
-# Load .env file
-if [ -f .env ]; then
-    export $(cat .env | grep -v '#' | awk '/=/ {print $1}')
-fi
-
 cd client
 
 echo "##############################"
@@ -19,4 +14,4 @@ echo "##############################"
 echo "Deploying Frontend project..."
 echo "##############################"
 
-scp -i ../deploy_key -r ./build/*  root@$DROPLET_URL:/var/www/$PROJECT_NAME
+scp -i ../deploy_key -r ./build/*  root@$SERVER_IP_ADDRESS:/var/www/$PROJECT_NAME

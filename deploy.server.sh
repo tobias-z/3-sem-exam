@@ -1,8 +1,3 @@
-# Load .env file
-if [ -f .env ]; then
-    export $(cat .env | grep -v '#' | awk '/=/ {print $1}')
-fi
-
 cd server
 
 echo "##############################"
