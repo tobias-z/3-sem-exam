@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Card } from "react-bootstrap";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useUser } from "../../context/UserProvider";
 import MyInput from "../../components/MyInput";
 import { useMutation } from "../../hooks/promise";
@@ -8,6 +8,7 @@ import { fetchData, https } from "../../apiUtils";
 import { PROJECT_USER_HOURS } from "../../settings";
 
 export default function UserProject({ projects, run: reFetchProjects }) {
+  let { push } = useHistory();
   let { user } = useUser();
   let { projectId } = useParams();
   let [project, setProject] = useState(null);
@@ -35,6 +36,15 @@ export default function UserProject({ projects, run: reFetchProjects }) {
         },
       }
     );
+  }
+
+  function handleComplete() {
+    run(() => fetchData(PROJECT_USER_HOURS.COMPLETE(projectId), https.PUT), {
+      onSuccess() {
+        push("/user");
+        reFetchProjects.current();
+      },
+    });
   }
 
   return (
@@ -86,7 +96,7 @@ export default function UserProject({ projects, run: reFetchProjects }) {
                       onClick={handleEditHours}>
                       Add to hours worked
                     </Button>
-                    <Button variant="success" type="submit">
+                    <Button variant="success" onClick={handleComplete}>
                       Complete user story
                     </Button>
                   </div>

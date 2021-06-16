@@ -21,6 +21,7 @@ let DEVELOPER = {
 let PROJECT_USER_HOURS = {
   EDIT_HOURS: (projectId, hoursWorked) =>
     `${BASE_URL}/project-user-hours?projectId=${projectId}&hoursWorked=${hoursWorked}`,
+  COMPLETE: projectId => `${BASE_URL}/project-user-hours/${projectId}`,
 };
 
 export { USER, PROJECT, DEVELOPER, PROJECT_USER_HOURS };

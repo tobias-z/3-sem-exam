@@ -134,8 +134,10 @@ public class ProjectFacade implements ProjectRepository {
     public ProjectsDTO getAllDevelopersProjects(String username) throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
-            List<Project> projects = em.createQuery("SELECT p FROM Project p "
-                + "JOIN p.projectUserHours pu WHERE pu.user.userName = :username", Project.class)
+            List<Project> projects = em.createQuery(
+                "SELECT p FROM Project p "
+                    + "JOIN p.projectUserHours pu WHERE pu.user.userName = :username"
+                    + " AND pu.isComplete = false", Project.class)
                 .setParameter("username", username).getResultList();
             return new ProjectsDTO(projects);
         } catch (Exception e) {
