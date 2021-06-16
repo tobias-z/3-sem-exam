@@ -7,6 +7,7 @@ let USER = {
 
 let PROJECT = {
   ALL_PROJECTS: `${BASE_URL}/projects`,
+  ADD_PROJECT: `${BASE_URL}/projects`,
 };
 
 export { USER, PROJECT };
