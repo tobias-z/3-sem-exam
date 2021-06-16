@@ -46,4 +46,28 @@ public class ProjectUserHoursFacade implements ProjectUserHoursRepository {
             em.close();
         }
     }
+
+    @Override
+    public ProjectUserHoursDTO completeProjectUserHours(String username, Integer projectId)
+        throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            ProjectUserHours projectUserHours = em.find(ProjectUserHours.class, new ProjectUserId(username, projectId));
+            if (projectUserHours == null) {
+                throw new WebApplicationException(
+                    "Unable to find project user hours for username: " + username + ", and project id: " + projectId
+                );
+            }
+            em.getTransaction().begin();
+            projectUserHours.setComplete(true);
+            em.getTransaction().commit();
+            return new ProjectUserHoursDTO(projectUserHours);
+        } catch (Exception e) {
+            throw new WebApplicationException(
+                "Unable to complete project user hours with id: " + projectId + ", and username: " + username
+            );
+        } finally {
+            em.close();
+        }
+    }
 }

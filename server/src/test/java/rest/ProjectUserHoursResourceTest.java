@@ -89,5 +89,50 @@ class ProjectUserHoursResourceTest extends SetupRestTests {
                 .statusCode(200);
         }
 
+        @Test
+        @DisplayName("should return error code when not logged in")
+        void shouldReturnErrorCodeWhenNotLoggedIn() throws Exception {
+            given()
+                .contentType(ContentType.JSON)
+                .queryParam("projectId", project1.getId())
+                .queryParam("hoursWorked", 15)
+                .when()
+                .put("/project-user-hours")
+                .then()
+                .statusCode(403);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("complete project user hours ")
+    class CompleteProjectUserHours {
+
+        @Test
+        @DisplayName("should complete the project")
+        void shouldCompleteTheProject() throws Exception {
+            String token = login();
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .pathParam("projectId", project1.getId())
+                .when()
+                .put("/project-user-hours/{projectId}")
+                .then()
+                .statusCode(200);
+        }
+
+        @Test
+        @DisplayName("should return error code when not logged in")
+        void shouldReturnErrorCodeWhenNotLoggedIn() throws Exception {
+            given()
+                .contentType(ContentType.JSON)
+                .pathParam("projectId", project1.getId())
+                .when()
+                .put("/project-user-hours/{projectId}")
+                .then()
+                .statusCode(403);
+        }
+
     }
 }

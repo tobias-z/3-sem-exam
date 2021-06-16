@@ -1,8 +1,13 @@
 package facades;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import dtos.project.ProjectUserHoursDTO;
 import entities.project.Project;
 import entities.projecthours.ProjectUserHoursRepository;
 import entities.user.Role;
@@ -60,6 +65,34 @@ class ProjectUserHoursFacadeTest {
         @DisplayName("should correctly plus the old hours with the new")
         void shouldCorrectlyPlusTheOldHoursWithTheNew() throws Exception {
             assertDoesNotThrow(() -> repo.editProjectUserHours(user.getUserName(), project1.getId(), 10));
+        }
+
+        @Test
+        @DisplayName("should throw exception if given wrong input")
+        void shouldThrowExceptionIfGivenWrongInput() throws Exception {
+            assertThrows(WebApplicationException.class, () -> repo.editProjectUserHours(null, project1.getId(), 10));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("complete project user hours")
+    class CompleteProjectUserHours {
+
+        @Test
+        @DisplayName("should complete a project user hours")
+        void shouldCompleteAProjectUserHours() throws Exception {
+            ProjectUserHoursDTO projectUserHoursDTO = repo.completeProjectUserHours(user.getUserName(), project1.getId());
+            assertTrue(projectUserHoursDTO.isComplete());
+        }
+
+        @Test
+        @DisplayName("should throw exception given incorrect input")
+        void shouldThrowExceptionGivenIncorrectInput() throws Exception {
+            assertThrows(
+                WebApplicationException.class, () -> repo.completeProjectUserHours(user.getUserName(),
+                null)
+            );
         }
 
     }

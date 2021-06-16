@@ -27,8 +27,6 @@ public class LoginEndpointTest extends SetupRestTests {
         shutdownServer();
     }
 
-    // Setup the DataBase (used by the test-server and this test) in a known state BEFORE EACH TEST
-    //TODO -- Make sure to change the EntityClass used below to use YOUR OWN (renamed) Entity class
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();

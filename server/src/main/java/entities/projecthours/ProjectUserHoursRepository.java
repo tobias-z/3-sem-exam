@@ -7,4 +7,6 @@ public interface ProjectUserHoursRepository {
 
     ProjectUserHoursDTO editProjectUserHours(String username, Integer id, Integer hoursWorked) throws WebApplicationException;
 
+    ProjectUserHoursDTO completeProjectUserHours(String username, Integer projectId) throws WebApplicationException;
+
 }

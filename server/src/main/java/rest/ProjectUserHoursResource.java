@@ -6,8 +6,10 @@ import entities.projecthours.ProjectUserHoursRepository;
 import facades.ProjectUserHoursFacade;
 import java.sql.PseudoColumnUsage;
 import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -30,6 +32,16 @@ public class ProjectUserHoursResource extends Provider {
     ) {
         String username = context.getUserPrincipal().getName();
         ProjectUserHoursDTO projectUserHoursDTO = REPO.editProjectUserHours(username, projectId, hoursWorked);
-        return Response.ok().build();
+        return Response.ok(projectUserHoursDTO).build();
     }
+
+    @PUT
+    @RolesAllowed({"user", "admin"})
+    @Path("/{projectId}")
+    public Response completeProjectUserHours(@PathParam("projectId") Integer projectId) {
+        String username = context.getUserPrincipal().getName();
+        ProjectUserHoursDTO projectUserHoursDTO = REPO.completeProjectUserHours(username, projectId);
+        return Response.ok(projectUserHoursDTO).build();
+    }
+
 }
