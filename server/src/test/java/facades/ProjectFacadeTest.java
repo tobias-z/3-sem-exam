@@ -3,6 +3,7 @@ package facades;
 import static org.junit.jupiter.api.Assertions.*;
 
 import dtos.project.ProjectDTO;
+import dtos.project.ProjectsDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
 import entities.renameme.RenameMe;
@@ -49,9 +50,9 @@ class ProjectFacadeTest {
         @Test
         @DisplayName("should return all the projects")
         void shouldReturnAllTheProjects() throws Exception {
-            List<ProjectDTO> projectDTOS = repo.getAllProjects();
-            assertFalse(projectDTOS.isEmpty());
-            assertEquals(2, projectDTOS.size());
+            ProjectsDTO projects = repo.getAllProjects();
+            assertFalse(projects.getProjects().isEmpty());
+            assertEquals(2, projects.getProjects().size());
         }
 
     }

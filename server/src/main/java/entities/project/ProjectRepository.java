@@ -1,11 +1,12 @@
 package entities.project;
 
 import dtos.project.ProjectDTO;
+import dtos.project.ProjectsDTO;
 import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
 public interface ProjectRepository {
 
-    List<ProjectDTO> getAllProjects() throws WebApplicationException;
+    ProjectsDTO getAllProjects() throws WebApplicationException;
 
 }

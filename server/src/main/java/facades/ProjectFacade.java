@@ -1,6 +1,7 @@
 package facades;
 
 import dtos.project.ProjectDTO;
+import dtos.project.ProjectsDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
 import java.util.List;
@@ -26,11 +27,11 @@ public class ProjectFacade implements ProjectRepository {
     }
 
     @Override
-    public List<ProjectDTO> getAllProjects() throws WebApplicationException {
+    public ProjectsDTO getAllProjects() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
             List<Project> projects = em.createQuery("SELECT p FROM Project p", Project.class).getResultList();
-            return ProjectDTO.getProjectDTOSFromProjects(projects);
+            return new ProjectsDTO(projects);
         } catch (Exception e) {
             throw new WebApplicationException("Unable to find any projects");
         } finally {
