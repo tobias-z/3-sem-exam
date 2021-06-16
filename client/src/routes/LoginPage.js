@@ -28,7 +28,7 @@ export default function LoginPage() {
   }
 
   return (
-    <Layout>
+    <Layout noHeader>
       <CenteredContainer>
         <h1>Sign in</h1>
         <Form style={{ width: "400px" }} onSubmit={handleSubmit}>

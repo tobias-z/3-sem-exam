@@ -1,5 +1,5 @@
 import { fetchData, https } from "../apiUtils";
-import { USER, INFO } from "../settings";
+import { USER } from "../settings";
 
 async function login(credentials) {
   let data = await fetchData(USER.LOGIN, https.POST, credentials);
@@ -7,13 +7,9 @@ async function login(credentials) {
   return data;
 }
 
-function getDataFromServer() {
-  return fetchData(INFO.USER);
-}
-
 let setToken = token => localStorage.setItem("jwtToken", token);
 let getToken = () => localStorage.getItem("jwtToken");
 let isLoggedIn = () => getToken() != null;
 let logout = () => localStorage.removeItem("jwtToken");
 
-export { setToken, getToken, isLoggedIn, login, logout, getDataFromServer };
+export { setToken, getToken, isLoggedIn, login, logout };

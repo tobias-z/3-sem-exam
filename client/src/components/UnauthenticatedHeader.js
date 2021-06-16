@@ -6,7 +6,7 @@ function UnauthenticatedHeader() {
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
         <LinkContainer to="/">
-          <Navbar.Brand>inSession Startcode</Navbar.Brand>
+          <Navbar.Brand>Time Tracker</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
