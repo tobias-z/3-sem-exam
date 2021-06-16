@@ -1,8 +1,5 @@
 package rest;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import entities.renameme.RenameMe;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
 import java.net.URI;

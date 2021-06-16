@@ -1,22 +1,21 @@
 package facades;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
-import entities.renameme.RenameMe;
-import entities.renameme.RenameMeRepository;
 import entities.user.Role;
 import entities.user.User;
-import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.ws.rs.WebApplicationException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
