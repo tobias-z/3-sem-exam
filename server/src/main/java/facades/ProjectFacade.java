@@ -56,6 +56,15 @@ public class ProjectFacade implements ProjectRepository {
         }
     }
 
+    private boolean isValidProjectDTO(ProjectDTO project) {
+        if (project.getName() == null || project.getName().isEmpty()) {
+            return false;
+        } else if (project.getDescription() == null || project.getDescription().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public ProjectsDTO getAllProjects() throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
@@ -71,6 +80,9 @@ public class ProjectFacade implements ProjectRepository {
 
     @Override
     public ProjectDTO createProject(ProjectDTO projectDTO) throws WebApplicationException {
+        if (!isValidProjectDTO(projectDTO)) {
+            throw new WebApplicationException("Invalid project", 400);
+        }
         Project project = new Project(projectDTO.getName(), projectDTO.getDescription());
         executeInsideTransaction("Unable to create project", em -> em.persist(project));
         return new ProjectDTO(project);

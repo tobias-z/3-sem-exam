@@ -12,6 +12,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.ws.rs.WebApplicationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -87,6 +88,13 @@ class ProjectFacadeTest {
             ProjectDTO createdProject = repo.createProject(projectDTO);
             assertEquals(projectDTO.getDescription(), createdProject.getDescription());
             assertEquals(projectDTO.getName(), createdProject.getName());
+        }
+
+        @Test
+        @DisplayName("should throw exception given an incorrect projectDTO")
+        void shouldThrowExceptionGivenAnIncorrectProjectDto() throws Exception {
+            ProjectDTO projectDTO = new ProjectDTO(null, "hello");
+            assertThrows(WebApplicationException.class, () -> repo.createProject(projectDTO));
         }
 
     }

@@ -2,6 +2,7 @@ package dtos.project;
 
 import entities.project.Project;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ProjectDTO {
@@ -49,5 +50,24 @@ public class ProjectDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProjectDTO)) {
+            return false;
+        }
+        ProjectDTO that = (ProjectDTO) o;
+        return Objects.equals(getId(), that.getId()) && Objects
+            .equals(getName(), that.getName()) && Objects
+            .equals(getDescription(), that.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getDescription());
     }
 }

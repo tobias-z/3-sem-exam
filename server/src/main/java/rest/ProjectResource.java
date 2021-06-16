@@ -5,7 +5,9 @@ import dtos.project.ProjectsDTO;
 import entities.project.ProjectRepository;
 import facades.ProjectFacade;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import rest.provider.Provider;
@@ -20,6 +22,14 @@ public class ProjectResource extends Provider {
     public Response getAllProjects() {
         ProjectsDTO projects = REPO.getAllProjects();
         return Response.ok(GSON.toJson(projects)).build();
+    }
+
+    @POST
+    @RolesAllowed("admin")
+    public Response createProject(String requestBody) {
+        ProjectDTO projectDTO = GSON.fromJson(requestBody, ProjectDTO.class);
+        ProjectDTO createdProject = REPO.createProject(projectDTO);
+        return Response.ok(GSON.toJson(createdProject)).build();
     }
 
     @GET
