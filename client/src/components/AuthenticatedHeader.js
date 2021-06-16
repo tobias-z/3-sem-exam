@@ -3,6 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useAuth } from "../context/AuthProvider";
 import { useUser } from "../context/UserProvider";
 import WithAdmin from "./WithAdmin";
+import WithUser from "./WithUser";
 
 export default function AuthenticatedHeader() {
   let { user } = useUser();
@@ -20,6 +21,11 @@ export default function AuthenticatedHeader() {
             <LinkContainer exact to="/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
+            <WithUser>
+              <LinkContainer exact to="/user">
+                <Nav.Link>Profile</Nav.Link>
+              </LinkContainer>
+            </WithUser>
             <WithAdmin>
               <LinkContainer exact to="/admin">
                 <Nav.Link>Admin</Nav.Link>

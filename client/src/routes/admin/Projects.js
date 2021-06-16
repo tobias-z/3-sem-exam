@@ -13,7 +13,7 @@ export default function Projects() {
       <DisplayError error={error} />
       {value && (
         <Row>
-          <Col md="3">
+          <Col md="2">
             <ul>
               {value.projects.map(project => (
                 <li

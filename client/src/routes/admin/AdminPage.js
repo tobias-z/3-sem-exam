@@ -4,6 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import Projects from "./Projects";
 import AddProject from "./AddProject";
+import WithAdmin from "../../components/WithAdmin";
 
 function AdminPageNav() {
   return (
@@ -24,20 +25,22 @@ function AdminPageNav() {
 export default function AdminPage() {
   return (
     <Layout>
-      <h1 className="text-center">Project management</h1>
-      <hr />
-      <AdminPageNav />
-      <div className="mt-4">
-        <Switch>
-          <Route path="/admin/projects" component={Projects} />
-          <Route exact path="/admin/add-project" component={AddProject} />
-          <Route path="/admin">
-            <h4 className="mt-4 text-center">
-              This is the admin dashbard, pick any management you'd like
-            </h4>
-          </Route>
-        </Switch>
-      </div>
+      <WithAdmin>
+        <h1 className="text-center">Project management</h1>
+        <hr />
+        <AdminPageNav />
+        <div className="mt-4">
+          <Switch>
+            <Route path="/admin/projects" component={Projects} />
+            <Route exact path="/admin/add-project" component={AddProject} />
+            <Route path="/admin">
+              <h4 className="mt-4 text-center">
+                This is the admin dashbard, pick any management you'd like
+              </h4>
+            </Route>
+          </Switch>
+        </div>
+      </WithAdmin>
     </Layout>
   );
 }

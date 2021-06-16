@@ -10,6 +10,8 @@ let PROJECT = {
   ADD_PROJECT: `${BASE_URL}/projects`,
   ADD_DEVELOPER: (developerName, projectId) =>
     `${BASE_URL}/projects?username=${developerName}&projectId=${projectId}`,
+  GET_DEVELOPERS_PROJECTS: developerName =>
+    `${BASE_URL}/projects/${developerName}`,
 };
 
 let DEVELOPER = {

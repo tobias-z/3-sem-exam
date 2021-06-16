@@ -35,8 +35,8 @@ export default function Project({ projects }) {
         <section>
           <div className="d-flex justify-content-around">
             <div>
-              <h3>{project.name}</h3>
-              <p>{project.description}</p>
+              <h2>{project.name}</h2>
+              <h6>{project.description}</h6>
             </div>
             <div>
               {developers && (
@@ -51,26 +51,43 @@ export default function Project({ projects }) {
           <div>
             <h4>Active developers on project</h4>
             {project.developers[0] ? (
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Billing per hour</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {project.developers.map(dev => (
-                    <tr key={dev.name}>
-                      <td>{dev.name}</td>
-                      <td>{dev.email}</td>
-                      <td>{dev.phone}</td>
-                      <td>{dev.billingPerHour}</td>
+              <>
+                <Table striped bordered hover>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone</th>
+                      <th>Billing per hour</th>
+                      <th>Hours spent</th>
+                      <th>User story</th>
+                      <th>Description</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {project.developers.map(dev => (
+                      <tr key={dev.name}>
+                        <td>{dev.name}</td>
+                        <td>{dev.email}</td>
+                        <td>{dev.phone}</td>
+                        <td>{dev.billingPerHour}</td>
+                        <td>{dev.hoursSpent}</td>
+                        <td>{dev.userStory}</td>
+                        <td>{dev.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+                <hr className="my-4" style={{ border: "1px solid gray" }} />
+                <div className="d-flex justify-content-end">
+                  <h5>
+                    Total:{" "}
+                    {project.developers.reduce((state, dev) => {
+                      return state + dev.hoursSpent * dev.billingPerHour;
+                    }, 0)}
+                  </h5>
+                </div>
+              </>
             ) : (
               <p>No active developers were found. Go ahead and add them!</p>
             )}
