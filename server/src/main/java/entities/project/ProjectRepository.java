@@ -9,4 +9,6 @@ public interface ProjectRepository {
 
     ProjectsDTO getAllProjects() throws WebApplicationException;
 
+    ProjectDTO createProject(ProjectDTO projectDTO) throws WebApplicationException;
+
 }

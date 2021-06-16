@@ -1,6 +1,6 @@
 package dtos.user;
 
-import entities.User;
+import entities.user.User;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package facades;
 
 import dtos.user.UserDTO;
-import entities.User;
+import entities.user.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import security.errorhandling.AuthenticationException;

@@ -1,6 +1,7 @@
-package entities;
+package entities.user;
 
 import entities.project.Project;
+import entities.user.Role;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

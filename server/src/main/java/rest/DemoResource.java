@@ -10,7 +10,7 @@ import dtos.Example.CombinedDTO;
 import dtos.Example.JokeDTO;
 import dtos.Example.WeatherDTO;
 import dtos.RenameMeDTO;
-import entities.User;
+import entities.user.User;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +56,7 @@ public class DemoResource {
 
         EntityManager em = EMF.createEntityManager();
         try {
-            TypedQuery<User> query = em.createQuery("select u from User u", entities.User.class);
+            TypedQuery<User> query = em.createQuery("select u from User u", User.class);
             List<User> users = query.getResultList();
             return "[" + users.size() + "]";
         } finally {
