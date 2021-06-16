@@ -2,6 +2,7 @@ package facades;
 
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
+import dtos.user.DeveloperDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
 import entities.user.User;
@@ -46,11 +47,11 @@ public class ProjectFacade implements ProjectRepository {
         try {
             User user = em.find(User.class, username);
             if (user == null) {
-                throw new WebApplicationException("No user found with username: " + username);
+                throw new WebApplicationException("No user found with username: " + username, 400);
             }
             return action.commit(user, em);
         } catch (Exception e) {
-            throw new WebApplicationException(e.getMessage());
+            throw new WebApplicationException(e.getMessage(), 400);
         } finally {
             em.close();
         }
@@ -86,6 +87,21 @@ public class ProjectFacade implements ProjectRepository {
         Project project = new Project(projectDTO.getName(), projectDTO.getDescription());
         executeInsideTransaction("Unable to create project", em -> em.persist(project));
         return new ProjectDTO(project);
+    }
+
+    @Override
+    public ProjectDTO addDeveloperToProject(String username, Integer projectId)
+        throws WebApplicationException {
+        return withUser(username, (user, em) -> {
+            Project project = em.find(Project.class, projectId);
+            if (project == null) {
+                throw new WebApplicationException("Unable to find project with id: " + projectId);
+            }
+            em.getTransaction().begin();
+            user.addProject(project);
+            em.getTransaction().commit();
+            return new ProjectDTO(project);
+        });
     }
 
 }

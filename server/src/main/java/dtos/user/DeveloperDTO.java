@@ -1,6 +1,8 @@
 package dtos.user;
 
 import entities.user.User;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DeveloperDTO {
 
@@ -21,6 +23,12 @@ public class DeveloperDTO {
         this.email = user.getEmail();
         this.phone = user.getPhone();
         this.billingPerHour = user.getBillingPerHour();
+    }
+
+    public static List<DeveloperDTO> getDevelopersFromUsers(List<User> users) {
+        return users.stream()
+            .map(user -> new DeveloperDTO(user))
+            .collect(Collectors.toList());
     }
 
     public String getName() {

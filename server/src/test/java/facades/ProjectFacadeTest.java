@@ -8,6 +8,8 @@ import entities.project.Project;
 import entities.project.ProjectRepository;
 import entities.renameme.RenameMe;
 import entities.renameme.RenameMeRepository;
+import entities.user.Role;
+import entities.user.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -26,6 +28,7 @@ class ProjectFacadeTest {
     private static ProjectRepository repo;
 
     public static Project project1, project2;
+    public static User user;
 
     @BeforeEach
     void setUp() {
@@ -33,9 +36,25 @@ class ProjectFacadeTest {
         repo = ProjectFacade.getInstance(emf);
         EntityManager em = emf.createEntityManager();
         try {
+            em.getTransaction().begin();
+            em.createNamedQuery("Project.deleteAllRows").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
+
+            ////////////////////////////////////////////////////////////////////////////////
+            // User
+
+            Role userRole = new Role("user");
+            user = new User("user", "test");
+            user.addRole(userRole);
+            em.persist(userRole);
+            em.persist(user);
+
+            ////////////////////////////////////////////////////////////////////////////////
+            // Project
+
             project1 = new Project("project1", "something1");
             project2 = new Project("project2", "something2");
-            em.getTransaction().begin(); em.createNamedQuery("Project.deleteAllRows").executeUpdate();
             em.persist(project1);
             em.persist(project2);
             em.getTransaction().commit();
@@ -95,6 +114,37 @@ class ProjectFacadeTest {
         void shouldThrowExceptionGivenAnIncorrectProjectDto() throws Exception {
             ProjectDTO projectDTO = new ProjectDTO(null, "hello");
             assertThrows(WebApplicationException.class, () -> repo.createProject(projectDTO));
+        }
+
+    }
+
+    @Nested
+    @DisplayName("add developer to project")
+    class AddDeveloperToProject {
+
+        @Test
+        @DisplayName("should add a developer to project")
+        void shouldAddADeveloperToProject() throws Exception {
+            ProjectDTO projectDTO = repo.addDeveloperToProject(user.getUserName(), project1.getId());
+            assertEquals(1, projectDTO.getDevelopers().size());
+        }
+
+        @Test
+        @DisplayName("should throw exception if unknown user")
+        void shouldThrowExceptionIfUnknownUser() throws Exception {
+            assertThrows(
+                WebApplicationException.class,
+                () -> repo.addDeveloperToProject(null, project1.getId())
+            );
+        }
+
+        @Test
+        @DisplayName("should throw exception if project does not exist")
+        void shouldThrowExceptionIfProjectDoesNotExist() throws Exception {
+            assertThrows(
+                WebApplicationException.class,
+                () -> repo.addDeveloperToProject(user.getUserName(), null)
+            );
         }
 
     }

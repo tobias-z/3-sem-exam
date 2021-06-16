@@ -31,6 +31,7 @@ class ProjectResourceTest extends SetupRestTests {
     }
 
     public static Project project1, project2;
+    User user;
 
     @BeforeEach
     void setUp() {
@@ -46,7 +47,7 @@ class ProjectResourceTest extends SetupRestTests {
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            User user = new User("user", "test");
+            user = new User("user", "test");
             user.addRole(userRole);
             User admin = new User("admin", "test");
             admin.addRole(adminRole);
@@ -166,6 +167,42 @@ class ProjectResourceTest extends SetupRestTests {
                 .then()
                 .statusCode(401);
         }
+    }
+
+    @Nested
+    @DisplayName("add developer to project")
+    class AddDeveloperToProject {
+
+        @Test
+        @DisplayName("should add a developer to the project")
+        void shouldAddADeveloperToTheProject() throws Exception {
+            String token = login("admin", "test");
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .queryParam("username", user.getUserName())
+                .queryParam("projectId", project2.getId())
+                .when()
+                .put("/projects")
+                .then()
+                .statusCode(200);
+        }
+
+        @Test
+        @DisplayName("should return error when given incorrect username")
+        void shouldReturnErrorWhenGivenIncorrectUsername() throws Exception {
+            String token = login("admin", "test");
+            given()
+                .contentType(ContentType.JSON)
+                .header("x-access-token", token)
+                .queryParam("username", "dsadadadadasda")
+                .queryParam("projectId", project2.getId())
+                .when()
+                .put("/projects")
+                .then()
+                .statusCode(400);
+        }
+
     }
 
 }

@@ -11,4 +11,6 @@ public interface ProjectRepository {
 
     ProjectDTO createProject(ProjectDTO projectDTO) throws WebApplicationException;
 
+    ProjectDTO addDeveloperToProject(String username, Integer projectId) throws WebApplicationException;
+
 }
