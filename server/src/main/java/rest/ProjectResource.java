@@ -11,6 +11,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import rest.provider.Provider;
@@ -45,6 +46,14 @@ public class ProjectResource extends Provider {
         AddDeveloperToProjectDTO addDeveloperToProjectDTO = GSON.fromJson(requestBody, AddDeveloperToProjectDTO.class);
         ProjectDTO projectDTO = REPO.addDeveloperToProject(username, projectId, addDeveloperToProjectDTO);
         return Response.ok(GSON.toJson(projectDTO)).build();
+    }
+
+    @GET
+    @Path("/{username}")
+    @RolesAllowed("user")
+    public Response getAllDevelopersProjects(@PathParam("username") String username) {
+        ProjectsDTO projectsDTO = REPO.getAllDevelopersProjects(username);
+        return Response.ok(projectsDTO).build();
     }
 
     @GET

@@ -3,7 +3,6 @@ package entities.project;
 import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
-import java.util.List;
 import javax.ws.rs.WebApplicationException;
 
 public interface ProjectRepository {
@@ -17,5 +16,7 @@ public interface ProjectRepository {
         Integer projectId,
         AddDeveloperToProjectDTO addDeveloperToProjectDTO
     ) throws WebApplicationException;
+
+    ProjectsDTO getAllDevelopersProjects(String username) throws WebApplicationException;
 
 }

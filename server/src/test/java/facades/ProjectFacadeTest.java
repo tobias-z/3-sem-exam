@@ -69,7 +69,10 @@ class ProjectFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("ProjectUserHours.deleteAllRows").executeUpdate();
             em.createNamedQuery("Project.deleteAllRows").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -156,6 +159,34 @@ class ProjectFacadeTest {
                 WebApplicationException.class,
                 () -> repo.addDeveloperToProject(user.getUserName(), null, addDeveloperToProjectDTO)
             );
+        }
+
+    }
+
+    @Nested
+    @DisplayName("get all developers projects")
+    class GetAllDevelopersProjects {
+
+        @BeforeEach
+        void setUp() {
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Something", "Do it");
+            repo.addDeveloperToProject(user.getUserName(), project2.getId(), addDeveloperToProjectDTO);
+        }
+
+        @Test
+        @DisplayName("should return all projects the developer is on")
+        void shouldReturnAllProjectsTheDeveloperIsOn() throws Exception {
+            ProjectsDTO projectsDTO = repo.getAllDevelopersProjects(user.getUserName());
+            assertNotNull(projectsDTO);
+            assertFalse(projectsDTO.getProjects().isEmpty());
+        }
+
+        @Test
+        @DisplayName("should return an empty array when nothing is found")
+        void shouldReturnAnEmptyArrayWhenNothingIsFound() throws Exception {
+            dropAllProjects();
+            ProjectsDTO projectsDTO = repo.getAllDevelopersProjects(user.getUserName());
+            assertTrue(projectsDTO.getProjects().isEmpty());
         }
 
     }

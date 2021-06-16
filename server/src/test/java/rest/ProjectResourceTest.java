@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import entities.project.Project;
+import entities.project.ProjectRepository;
 import entities.user.Role;
 import entities.user.User;
+import facades.ProjectFacade;
 import io.restassured.http.ContentType;
 import java.util.Arrays;
 import javax.persistence.EntityManager;
@@ -179,7 +181,8 @@ class ProjectResourceTest extends SetupRestTests {
         @DisplayName("should add a developer to the project")
         void shouldAddADeveloperToTheProject() throws Exception {
             String token = login("admin", "test");
-            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane", "DO it quick");
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane",
+                "DO it quick");
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
@@ -196,7 +199,8 @@ class ProjectResourceTest extends SetupRestTests {
         @DisplayName("should return error when given incorrect username")
         void shouldReturnErrorWhenGivenIncorrectUsername() throws Exception {
             String token = login("admin", "test");
-            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane", "DO it quick");
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane",
+                "DO it quick");
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
@@ -210,5 +214,35 @@ class ProjectResourceTest extends SetupRestTests {
         }
 
     }
+
+    @Nested
+    @DisplayName("get all developers projects")
+    class GetAllDevelopersProjects {
+
+        ProjectRepository repo = ProjectFacade.getInstance(emf);
+
+        @BeforeEach
+        void setUp() {
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Something",
+                "Do it");
+            repo.addDeveloperToProject(user.getUserName(), project2.getId(), addDeveloperToProjectDTO);
+        }
+
+        @Test
+        @DisplayName("getAllDevelopersProjects should return the developers projects")
+        void getAllDevelopersProjectsShouldReturnTheDevelopersProjects() throws Exception {
+            String token = login("user", "test");
+            given()
+                .contentType(ContentType.JSON)
+                .pathParam("username", user.getUserName())
+                .header("x-access-token", token)
+                .when()
+                .get("/projects/{username}")
+                .then()
+                .statusCode(200);
+        }
+
+    }
+
 
 }

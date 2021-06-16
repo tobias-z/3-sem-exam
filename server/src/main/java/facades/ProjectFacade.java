@@ -5,6 +5,7 @@ import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
+import entities.projecthours.ProjectUserHours;
 import entities.user.User;
 import entities.user.UserAction;
 import java.util.List;
@@ -89,6 +90,17 @@ public class ProjectFacade implements ProjectRepository {
         return new ProjectDTO(project);
     }
 
+    private boolean developerIsAlreadyInProject(Project project, User user) {
+        boolean isInProject = false;
+        for (ProjectUserHours projectUserHours : project.getProjectUserHours()) {
+            if (projectUserHours.getUser().equals(user)) {
+                isInProject = true;
+                break;
+            }
+        }
+        return isInProject;
+    }
+
     @Override
     public ProjectDTO addDeveloperToProject(
         String username,
@@ -101,9 +113,9 @@ public class ProjectFacade implements ProjectRepository {
             if (project == null) {
                 throw new WebApplicationException("Unable to find project with id: " + projectId, 400);
             }
-//            if (project.getUsers().contains(user)) {
-//                throw new WebApplicationException("That developer is already on this project", 400);
-//            }
+            if (developerIsAlreadyInProject(project, user)) {
+                throw new WebApplicationException("That developer is already on this project", 400);
+            }
             em.getTransaction().begin();
             user.addProject(
                 project,
@@ -114,6 +126,21 @@ public class ProjectFacade implements ProjectRepository {
             em.getTransaction().commit();
             return new ProjectDTO(project);
         });
+    }
+
+    @Override
+    public ProjectsDTO getAllDevelopersProjects(String username) throws WebApplicationException {
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<Project> projects = em.createQuery("SELECT p FROM Project p "
+                + "JOIN p.projectUserHours pu WHERE pu.user.userName = :username", Project.class)
+                .setParameter("username", username).getResultList();
+            return new ProjectsDTO(projects);
+        } catch (Exception e) {
+            throw new WebApplicationException("Unable to find any projects for the user: " + username);
+        } finally {
+            em.close();
+        }
     }
 
 }
