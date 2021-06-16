@@ -6,14 +6,13 @@ import MyInput from "../../components/MyInput";
 import { useMutation } from "../../hooks/promise";
 import { fetchData, https } from "../../apiUtils";
 import { PROJECT_USER_HOURS } from "../../settings";
-import DisplayError from "../../components/DisplayError";
 
 export default function UserProject({ projects, run: reFetchProjects }) {
   let { user } = useUser();
   let { projectId } = useParams();
   let [project, setProject] = useState(null);
   let [hoursWorked, setHoursWorked] = useState(0);
-  let { error, run } = useMutation();
+  let { run } = useMutation();
 
   useEffect(() => {
     let tmpProject = projects.find(p => Number(p.id) === Number(projectId));
@@ -80,7 +79,6 @@ export default function UserProject({ projects, run: reFetchProjects }) {
                     value={hoursWorked}
                     onChange={e => setHoursWorked(e.target.value)}
                   />
-                  <DisplayError error={error} />
                   <div className="d-flex" style={{ gap: "5px" }}>
                     <Button
                       variant="secondary"

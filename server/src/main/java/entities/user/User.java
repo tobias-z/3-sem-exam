@@ -60,7 +60,8 @@ public class User implements Serializable {
     public void addProject(Project project, Integer hoursSpent, String userStory,
         String description) {
         if (project != null) {
-            ProjectUserHours projectUserHours = new ProjectUserHours(project, this, hoursSpent, userStory, description);
+            ProjectUserHours projectUserHours = new ProjectUserHours(project, this, hoursSpent, userStory,
+                description, false);
             this.projectUserHours.add(projectUserHours);
             project.getProjectUserHours().add(projectUserHours);
         }

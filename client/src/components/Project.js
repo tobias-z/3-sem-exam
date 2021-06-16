@@ -62,6 +62,7 @@ export default function Project({ projects }) {
                       <th>Hours spent</th>
                       <th>User story</th>
                       <th>Description</th>
+                      <th>Completed</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -74,6 +75,11 @@ export default function Project({ projects }) {
                         <td>{dev.hoursSpent}</td>
                         <td>{dev.userStory}</td>
                         <td>{dev.description}</td>
+                        <td
+                          className="text-center"
+                          style={{ fontSize: "30px" }}>
+                          {dev.isComplete ? "✅" : "❌"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

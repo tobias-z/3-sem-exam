@@ -35,6 +35,8 @@ public class LoginEndpointTest extends SetupRestTests {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
+            em.createNamedQuery("ProjectUserHours.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Project.deleteAllRows").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 

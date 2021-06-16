@@ -14,9 +14,10 @@ public class ProjectUserHoursDTO {
     private String email;
     private String phone;
     private Integer billingPerHour;
+    private boolean isComplete;
 
     public ProjectUserHoursDTO(Integer hoursSpent, String userStory, String description, String name,
-        String email, String phone, Integer billingPerHour) {
+        String email, String phone, Integer billingPerHour, boolean isComplete) {
         this.hoursSpent = hoursSpent;
         this.userStory = userStory;
         this.description = description;
@@ -24,6 +25,7 @@ public class ProjectUserHoursDTO {
         this.email = email;
         this.phone = phone;
         this.billingPerHour = billingPerHour;
+        this.isComplete = isComplete;
     }
 
     public ProjectUserHoursDTO(ProjectUserHours projectUserHours) {
@@ -34,6 +36,7 @@ public class ProjectUserHoursDTO {
         this.email = projectUserHours.getUser().getEmail();
         this.phone = projectUserHours.getUser().getPhone();
         this.billingPerHour = projectUserHours.getUser().getBillingPerHour();
+        this.isComplete = projectUserHours.isComplete();
     }
 
     public static List<ProjectUserHoursDTO> getProjectUserHoursDTOSFromProjectUserHours(
@@ -102,5 +105,13 @@ public class ProjectUserHoursDTO {
 
     public void setBillingPerHour(Integer billingPerHour) {
         this.billingPerHour = billingPerHour;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 }

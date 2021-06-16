@@ -44,14 +44,18 @@ public class ProjectUserHours implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "isComplete")
+    private boolean isComplete;
+
     public ProjectUserHours(Project project, User user, Integer hoursSpent, String userStory,
-        String description) {
+        String description, boolean isComplete) {
         this.id = new ProjectUserId(user.getUserName(), project.getId());
         this.project = project;
         this.user = user;
         this.hoursSpent = hoursSpent;
         this.userStory = userStory;
         this.description = description;
+        this.isComplete = isComplete;
     }
 
     public ProjectUserHours() {
@@ -103,6 +107,14 @@ public class ProjectUserHours implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isComplete() {
+        return isComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        isComplete = complete;
     }
 
     @Override
