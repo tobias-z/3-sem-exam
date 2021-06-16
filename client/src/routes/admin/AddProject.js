@@ -1,9 +1,9 @@
 import { Alert } from "react-bootstrap";
-import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { fetchData, https } from "../../apiUtils";
 import DisplayError from "../../components/DisplayError";
 import MyInput from "../../components/MyInput";
+import { useProjects } from "../../context/ProjectsContext";
 import { useMutation } from "../../hooks/promise";
 import useForm from "../../hooks/useForm";
 import { PROJECT } from "../../settings";
@@ -16,10 +16,15 @@ let initialValues = {
 export default function AddProject() {
   let { values, handleChange, resetForm } = useForm(initialValues);
   let { value: project, run, error } = useMutation();
+  let { run: reFetchProjects } = useProjects();
 
   function handleSubmit(e) {
     e.preventDefault();
-    run(() => fetchData(PROJECT.ADD_PROJECT, https.POST, values));
+    run(() => fetchData(PROJECT.ADD_PROJECT, https.POST, values), {
+      onSuccess() {
+        reFetchProjects();
+      },
+    });
     resetForm();
   }
 

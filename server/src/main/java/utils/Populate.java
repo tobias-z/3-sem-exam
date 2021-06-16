@@ -15,6 +15,8 @@ public class Populate {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Project.deleteAllRows").executeUpdate();
+            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Role").executeUpdate();
             em.persist(project1);
             em.persist(project2);
             em.getTransaction().commit();

@@ -1,9 +1,12 @@
 package facades;
 
+import dtos.user.DeveloperDTO;
 import dtos.user.UserDTO;
 import entities.user.User;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.ws.rs.WebApplicationException;
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -28,6 +31,20 @@ public class UserFacade {
             instance = new UserFacade();
         }
         return instance;
+    }
+
+    public List<DeveloperDTO> getAllDevelopers() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            List<User> users = em.createQuery(
+                "SELECT u FROM User u JOIN u.roleList r WHERE r.roleName = :roleName", User.class
+            ).setParameter("roleName", "user").getResultList();
+            return DeveloperDTO.getDevelopersFromUsers(users);
+        } catch (Exception e) {
+            throw new WebApplicationException("Unable to find any developers");
+        } finally {
+            em.close();
+        }
     }
 
     public UserDTO getVerifiedUser(String username, String password) throws AuthenticationException {

@@ -3,6 +3,7 @@ package dtos.user;
 import entities.user.User;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDTO {
 
@@ -17,6 +18,12 @@ public class UserDTO {
     public UserDTO(User user) {
         this.username = user.getUserName();
         this.roles = RoleDTO.getRoleDTOSFromRoles(user.getRoleList());
+    }
+
+    public static List<UserDTO> getUserDTOSFromUsers(List<User> users) {
+        return users.stream()
+            .map(user -> new UserDTO(user))
+            .collect(Collectors.toList());
     }
 
     public List<String> getRolesAsStrings() {

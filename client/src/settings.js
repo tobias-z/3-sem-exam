@@ -8,6 +8,12 @@ let USER = {
 let PROJECT = {
   ALL_PROJECTS: `${BASE_URL}/projects`,
   ADD_PROJECT: `${BASE_URL}/projects`,
+  ADD_DEVELOPER: (developerName, projectId) =>
+    `${BASE_URL}/projects?username=${developerName}&projectId=${projectId}`,
 };
 
-export { USER, PROJECT };
+let DEVELOPER = {
+  ALL_DEVELOPERS: `${BASE_URL}/users`,
+};
+
+export { USER, PROJECT, DEVELOPER };
