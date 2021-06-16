@@ -1,11 +1,11 @@
-import { useRouteMatch } from "react-router";
+import { useRouteMatch } from "react-router-dom";
 import Layout from "../components/Layout";
 
 export default function NoMatch() {
-  let { path } = useRouteMatch();
+  let { url } = useRouteMatch();
   return (
     <Layout>
-      <h1>404: The path {path} is not a known route</h1>
+      <h1>404: The url {url} is not a known route</h1>
     </Layout>
   );
 }

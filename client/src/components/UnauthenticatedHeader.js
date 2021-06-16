@@ -10,13 +10,8 @@ function UnauthenticatedHeader() {
         </LinkContainer>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <LinkContainer exact to="/">
-              <Nav.Link>Home</Nav.Link>
-            </LinkContainer>
-          </Nav>
           <Nav>
-            <LinkContainer to="/login">
+            <LinkContainer to="/">
               <Nav.Link>Login</Nav.Link>
             </LinkContainer>
           </Nav>

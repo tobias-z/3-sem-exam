@@ -1,4 +1,4 @@
-let BASE_URL = "http://localhost:8080/time-tracker/api";
+let BASE_URL = "https://api.tobias-z.com/exam/api";
 
 let USER = {
   LOGIN: `${BASE_URL}/login`,
