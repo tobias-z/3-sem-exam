@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import { fetchData, https } from "../apiUtils";
 import { useProjects } from "../context/ProjectsContext";
 import { useMutation, useQuery } from "../hooks/promise";
+import useForm from "../hooks/useForm";
 import { DEVELOPER, PROJECT } from "../settings";
 import DisplayError from "./DisplayError";
+import MyInput from "./MyInput";
 
 export default function Project({ projects }) {
   let { projectId } = useParams();
@@ -14,7 +16,7 @@ export default function Project({ projects }) {
     value: developers,
     error: developerError,
     run,
-  } = useQuery(DEVELOPER.ALL_DEVELOPERS(projectId));
+  } = useQuery(DEVELOPER.ALL_DEVELOPERS);
 
   useEffect(() => {
     setProject(() =>
@@ -81,8 +83,14 @@ export default function Project({ projects }) {
   );
 }
 
+let initialState = {
+  userStory: "",
+  description: "",
+};
+
 function AddDeveloperForm({ developers, projectId, run: reRun }) {
   let [choosenDeveloper, setChoosenDeveloper] = useState(developers[0].name);
+  let { values, handleChange, resetForm } = useForm(initialState);
   let { run, error, value } = useMutation();
   let { run: reFetchProjects } = useProjects();
 
@@ -92,7 +100,8 @@ function AddDeveloperForm({ developers, projectId, run: reRun }) {
       () =>
         fetchData(
           PROJECT.ADD_DEVELOPER(choosenDeveloper, projectId),
-          https.PUT
+          https.PUT,
+          values
         ),
       {
         onSuccess() {
@@ -101,7 +110,8 @@ function AddDeveloperForm({ developers, projectId, run: reRun }) {
         },
       }
     );
-    setChoosenDeveloper(developers[0]);
+    setChoosenDeveloper(developers[0].name);
+    resetForm();
   }
 
   return (
@@ -125,7 +135,21 @@ function AddDeveloperForm({ developers, projectId, run: reRun }) {
             ))}
           </Form.Control>
         </Form.Group>
-        <Button size="sm" variant="success" type="submit">
+        <MyInput
+          name="userStory"
+          required
+          value={values.userStory}
+          onChange={handleChange}
+          label="User story"
+        />
+        <MyInput
+          name="description"
+          required
+          value={values.description}
+          onChange={handleChange}
+          label="Description"
+        />
+        <Button block variant="success" type="submit">
           Add developer
         </Button>
       </Form>

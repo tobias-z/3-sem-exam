@@ -9,11 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Table
 @Entity
-public class ProjectHours implements Serializable {
+@NamedQueries({
+    @NamedQuery(name = "ProjectUserHours.deleteAllRows", query = "DELETE from ProjectUserHours")
+})
+public class ProjectUserHours implements Serializable {
 
     private static final long serialVersionUID = 5296883145841368340L;
 
@@ -30,8 +35,8 @@ public class ProjectHours implements Serializable {
     @JoinColumn(name = "userId")
     private User user;
 
-    @Column(name = "hoursSpendt")
-    private Integer hoursSpendt;
+    @Column(name = "hoursSpent")
+    private Integer hoursSpent;
 
     @Column(name = "userStory")
     private String userStory;
@@ -39,17 +44,17 @@ public class ProjectHours implements Serializable {
     @Column(name = "description")
     private String description;
 
-    public ProjectHours(Project project, User user, Integer hoursSpendt, String userStory,
+    public ProjectUserHours(Project project, User user, Integer hoursSpent, String userStory,
         String description) {
         this.id = new ProjectUserId(user.getUserName(), project.getId());
         this.project = project;
         this.user = user;
-        this.hoursSpendt = hoursSpendt;
+        this.hoursSpent = hoursSpent;
         this.userStory = userStory;
         this.description = description;
     }
 
-    public ProjectHours() {
+    public ProjectUserHours() {
     }
 
     public ProjectUserId getId() {
@@ -76,12 +81,12 @@ public class ProjectHours implements Serializable {
         this.user = user;
     }
 
-    public Integer getHoursSpendt() {
-        return hoursSpendt;
+    public Integer getHoursSpent() {
+        return hoursSpent;
     }
 
-    public void setHoursSpendt(Integer hoursSpendt) {
-        this.hoursSpendt = hoursSpendt;
+    public void setHoursSpent(Integer hoursSpent) {
+        this.hoursSpent = hoursSpent;
     }
 
     public String getUserStory() {

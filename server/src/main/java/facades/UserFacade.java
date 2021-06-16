@@ -2,18 +2,13 @@ package facades;
 
 import dtos.user.DeveloperDTO;
 import dtos.user.UserDTO;
-import entities.project.Project;
 import entities.user.User;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
 import security.errorhandling.AuthenticationException;
 
-/**
- * @author lam@cphbusiness.dk
- */
 public class UserFacade {
 
     private static EntityManagerFactory emf;
@@ -22,11 +17,6 @@ public class UserFacade {
     private UserFacade() {
     }
 
-    /**
-     *
-     * @param _emf
-     * @return the instance of this facade.
-     */
     public static UserFacade getUserFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -35,7 +25,7 @@ public class UserFacade {
         return instance;
     }
 
-    public List<DeveloperDTO> getAllDevelopersFromProject(int projectId) {
+    public List<DeveloperDTO> getAllDevelopersFromProject() {
         EntityManager em = emf.createEntityManager();
         try {
             List<User> users = em.createQuery(

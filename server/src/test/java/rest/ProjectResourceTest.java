@@ -4,6 +4,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import entities.project.Project;
 import entities.user.Role;
@@ -38,6 +39,7 @@ class ProjectResourceTest extends SetupRestTests {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("ProjectUserHours.deleteAllRows").executeUpdate();
             em.createNamedQuery("Project.deleteAllRows").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
@@ -177,11 +179,13 @@ class ProjectResourceTest extends SetupRestTests {
         @DisplayName("should add a developer to the project")
         void shouldAddADeveloperToTheProject() throws Exception {
             String token = login("admin", "test");
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane", "DO it quick");
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
                 .queryParam("username", user.getUserName())
                 .queryParam("projectId", project2.getId())
+                .body(addDeveloperToProjectDTO)
                 .when()
                 .put("/projects")
                 .then()
@@ -192,11 +196,13 @@ class ProjectResourceTest extends SetupRestTests {
         @DisplayName("should return error when given incorrect username")
         void shouldReturnErrorWhenGivenIncorrectUsername() throws Exception {
             String token = login("admin", "test");
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO("Insane", "DO it quick");
             given()
                 .contentType(ContentType.JSON)
                 .header("x-access-token", token)
                 .queryParam("username", "dsadadadadasda")
                 .queryParam("projectId", project2.getId())
+                .body(addDeveloperToProjectDTO)
                 .when()
                 .put("/projects")
                 .then()

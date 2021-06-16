@@ -1,5 +1,6 @@
 package entities.project;
 
+import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
 import java.util.List;
@@ -11,6 +12,10 @@ public interface ProjectRepository {
 
     ProjectDTO createProject(ProjectDTO projectDTO) throws WebApplicationException;
 
-    ProjectDTO addDeveloperToProject(String username, Integer projectId) throws WebApplicationException;
+    ProjectDTO addDeveloperToProject(
+        String username,
+        Integer projectId,
+        AddDeveloperToProjectDTO addDeveloperToProjectDTO
+    ) throws WebApplicationException;
 
 }

@@ -14,6 +14,7 @@ public class Populate {
         Project project2 = new Project("project2", "something2");
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("ProjectUserHours.deleteAllRows").executeUpdate();
             em.createNamedQuery("Project.deleteAllRows").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();

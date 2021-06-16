@@ -1,6 +1,5 @@
 package dtos.project;
 
-import dtos.user.DeveloperDTO;
 import entities.project.Project;
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +10,7 @@ public class ProjectDTO {
     private Integer id;
     private String name;
     private String description;
-    private List<DeveloperDTO> developers;
+    private List<ProjectUserHoursDTO> developers;
 
     public ProjectDTO(String name, String description) {
         this.name = name;
@@ -22,7 +21,7 @@ public class ProjectDTO {
         this.id = project.getId();
         this.name = project.getName();
         this.description = project.getDescription();
-        this.developers = DeveloperDTO.getDevelopersFromUsers(project.getUsers());
+        this.developers = ProjectUserHoursDTO.getProjectUserHoursDTOSFromProjectUserHours(project.getProjectUserHours());
     }
 
     public static List<ProjectDTO> getProjectDTOSFromProjects(List<Project> projects) {
@@ -55,11 +54,11 @@ public class ProjectDTO {
         this.description = description;
     }
 
-    public List<DeveloperDTO> getDevelopers() {
+    public List<ProjectUserHoursDTO> getDevelopers() {
         return developers;
     }
 
-    public void setDevelopers(List<DeveloperDTO> developers) {
+    public void setDevelopers(List<ProjectUserHoursDTO> developers) {
         this.developers = developers;
     }
 

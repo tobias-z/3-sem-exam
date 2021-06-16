@@ -15,9 +15,8 @@ public class UserResource extends Provider {
     private final UserFacade FACADE = UserFacade.getUserFacade(EMF);
 
     @GET
-    @Path("/{projectId}")
-    public Response getAllDevelopers(@PathParam("projectId") int projectId) {
-        List<DeveloperDTO> developerDTOS = FACADE.getAllDevelopersFromProject(projectId);
+    public Response getAllDevelopers() {
+        List<DeveloperDTO> developerDTOS = FACADE.getAllDevelopersFromProject();
         return Response.ok(GSON.toJson(developerDTOS)).build();
     }
 }

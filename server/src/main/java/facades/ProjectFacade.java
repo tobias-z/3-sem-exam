@@ -1,8 +1,8 @@
 package facades;
 
+import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
-import dtos.user.DeveloperDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
 import entities.user.User;
@@ -90,18 +90,27 @@ public class ProjectFacade implements ProjectRepository {
     }
 
     @Override
-    public ProjectDTO addDeveloperToProject(String username, Integer projectId)
+    public ProjectDTO addDeveloperToProject(
+        String username,
+        Integer projectId,
+        AddDeveloperToProjectDTO addDeveloperToProjectDTO
+    )
         throws WebApplicationException {
         return withUser(username, (user, em) -> {
             Project project = em.find(Project.class, projectId);
             if (project == null) {
                 throw new WebApplicationException("Unable to find project with id: " + projectId, 400);
             }
-            if (project.getUsers().contains(user)) {
-                throw new WebApplicationException("That developer is already on this project", 400);
-            }
+//            if (project.getUsers().contains(user)) {
+//                throw new WebApplicationException("That developer is already on this project", 400);
+//            }
             em.getTransaction().begin();
-            user.addProject(project);
+            user.addProject(
+                project,
+                0,
+                addDeveloperToProjectDTO.getUserStory(),
+                addDeveloperToProjectDTO.getDescription()
+            );
             em.getTransaction().commit();
             return new ProjectDTO(project);
         });

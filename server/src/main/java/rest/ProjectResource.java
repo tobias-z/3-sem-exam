@@ -1,5 +1,6 @@
 package rest;
 
+import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
 import entities.project.ProjectRepository;
@@ -37,9 +38,12 @@ public class ProjectResource extends Provider {
     @PUT
     @RolesAllowed("admin")
     public Response addDeveloperToProject(
-        @QueryParam(value = "username") String username, @QueryParam("projectId") Integer projectId
+        @QueryParam(value = "username") String username,
+        @QueryParam("projectId") Integer projectId,
+        String requestBody
     ) {
-        ProjectDTO projectDTO = REPO.addDeveloperToProject(username, projectId);
+        AddDeveloperToProjectDTO addDeveloperToProjectDTO = GSON.fromJson(requestBody, AddDeveloperToProjectDTO.class);
+        ProjectDTO projectDTO = REPO.addDeveloperToProject(username, projectId, addDeveloperToProjectDTO);
         return Response.ok(GSON.toJson(projectDTO)).build();
     }
 

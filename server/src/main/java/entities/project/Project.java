@@ -1,7 +1,9 @@
 package entities.project;
 
+import entities.projecthours.ProjectUserHours;
 import entities.user.User;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,9 +38,13 @@ public class Project implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany
+    @OneToMany(
+        mappedBy = "project",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @JoinColumn(name = "users")
-    private List<User> users;
+    private List<ProjectUserHours> projectUserHours;
 
     public Project() {
     }
@@ -45,18 +52,7 @@ public class Project implements Serializable {
     public Project(String name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    public void removeUser(User user) {
-        if (user != null) {
-            this.users.remove(user);
-        }
-    }
-
-    public void addUser(User user) {
-        if (user != null) {
-            this.users.add(user);
-        }
+        this.projectUserHours = new ArrayList<>();
     }
 
     public void setId(Integer id) {
@@ -83,8 +79,11 @@ public class Project implements Serializable {
         this.description = description;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<ProjectUserHours> getProjectUserHours() {
+        return projectUserHours;
     }
 
+    public void setProjectUserHours(List<ProjectUserHours> projectUserHours) {
+        this.projectUserHours = projectUserHours;
+    }
 }

@@ -1,6 +1,7 @@
 package entities.user;
 
 import entities.project.Project;
+import entities.projecthours.ProjectUserHours;
 import entities.user.Role;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -48,20 +50,19 @@ public class User implements Serializable {
     @Column(name = "billingPerHour")
     private Integer billingPerHour;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Project> projects;
+    @OneToMany(
+        mappedBy = "user",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
+    private List<ProjectUserHours> projectUserHours;
 
-    public void addProject(Project project) {
+    public void addProject(Project project, Integer hoursSpent, String userStory,
+        String description) {
         if (project != null) {
-            this.projects.add(project);
-            project.addUser(this);
-        }
-    }
-
-    public void removeProject(Project project) {
-        if (project != null) {
-            this.projects.remove(project);
-            project.removeUser(this);
+            ProjectUserHours projectUserHours = new ProjectUserHours(project, this, hoursSpent, userStory, description);
+            this.projectUserHours.add(projectUserHours);
+            project.getProjectUserHours().add(projectUserHours);
         }
     }
 
@@ -79,11 +80,6 @@ public class User implements Serializable {
     public User() {
     }
 
-    //TODO Change when password is hashed
-    public boolean verifyPassword(String pw) {
-        return BCrypt.checkpw(pw, hashPassword);
-    }
-
     public User(String userName, String userPass) {
         this.userName = userName;
         this.hashPassword = BCrypt.hashpw(userPass, BCrypt.gensalt());
@@ -94,6 +90,12 @@ public class User implements Serializable {
         this.email = email;
         this.phone = phone;
         this.billingPerHour = billingPerHour;
+        this.projectUserHours = new ArrayList<>();
+    }
+
+    //TODO Change when password is hashed
+    public boolean verifyPassword(String pw) {
+        return BCrypt.checkpw(pw, hashPassword);
     }
 
     public String getUserName() {
@@ -148,8 +150,7 @@ public class User implements Serializable {
         this.billingPerHour = billingPerHour;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public List<ProjectUserHours> getProjectUserHours() {
+        return projectUserHours;
     }
-
 }

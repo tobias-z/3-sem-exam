@@ -2,6 +2,7 @@ package facades;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import dtos.project.AddDeveloperToProjectDTO;
 import dtos.project.ProjectDTO;
 import dtos.project.ProjectsDTO;
 import entities.project.Project;
@@ -37,6 +38,7 @@ class ProjectFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
+            em.createNamedQuery("ProjectUserHours.deleteAllRows").executeUpdate();
             em.createNamedQuery("Project.deleteAllRows").executeUpdate();
             em.createQuery("delete from User").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
@@ -125,25 +127,34 @@ class ProjectFacadeTest {
         @Test
         @DisplayName("should add a developer to project")
         void shouldAddADeveloperToProject() throws Exception {
-            ProjectDTO projectDTO = repo.addDeveloperToProject(user.getUserName(), project1.getId());
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO(
+                "Insane userstory", "Do it quickly!"
+            );
+            ProjectDTO projectDTO = repo.addDeveloperToProject(user.getUserName(), project1.getId(), addDeveloperToProjectDTO);
             assertEquals(1, projectDTO.getDevelopers().size());
         }
 
         @Test
         @DisplayName("should throw exception if unknown user")
         void shouldThrowExceptionIfUnknownUser() throws Exception {
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO(
+                "Insane userstory", "Do it quickly!"
+            );
             assertThrows(
                 WebApplicationException.class,
-                () -> repo.addDeveloperToProject(null, project1.getId())
+                () -> repo.addDeveloperToProject(null, project1.getId(), addDeveloperToProjectDTO)
             );
         }
 
         @Test
         @DisplayName("should throw exception if project does not exist")
         void shouldThrowExceptionIfProjectDoesNotExist() throws Exception {
+            AddDeveloperToProjectDTO addDeveloperToProjectDTO = new AddDeveloperToProjectDTO(
+                "Insane userstory", "Do it quickly!"
+            );
             assertThrows(
                 WebApplicationException.class,
-                () -> repo.addDeveloperToProject(user.getUserName(), null)
+                () -> repo.addDeveloperToProject(user.getUserName(), null, addDeveloperToProjectDTO)
             );
         }
 
