@@ -18,4 +18,9 @@ let DEVELOPER = {
   ALL_DEVELOPERS: `${BASE_URL}/users/`,
 };
 
-export { USER, PROJECT, DEVELOPER };
+let PROJECT_USER_HOURS = {
+  EDIT_HOURS: (projectId, hoursWorked) =>
+    `${BASE_URL}/project-user-hours?projectId=${projectId}&hoursWorked=${hoursWorked}`,
+};
+
+export { USER, PROJECT, DEVELOPER, PROJECT_USER_HOURS };

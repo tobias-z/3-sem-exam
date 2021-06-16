@@ -10,7 +10,7 @@ import { Row, Col } from "react-bootstrap";
 export default function UserPage() {
   let { user } = useUser();
   let { push } = useHistory();
-  let { value, error } = useQuery(
+  let { value, error, run } = useQuery(
     PROJECT.GET_DEVELOPERS_PROJECTS(user.username)
   );
 
@@ -36,7 +36,7 @@ export default function UserPage() {
           </Col>
           <Col>
             <Route path="/user/:projectId">
-              <UserProject projects={value.projects} />
+              <UserProject run={run} projects={value.projects} />
             </Route>{" "}
           </Col>
         </Row>

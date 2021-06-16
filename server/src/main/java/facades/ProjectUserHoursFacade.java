@@ -1,5 +1,6 @@
 package facades;
 
+import dtos.project.ProjectUserHoursDTO;
 import entities.projecthours.ProjectUserHours;
 import entities.projecthours.ProjectUserHoursRepository;
 import entities.projecthours.ProjectUserId;
@@ -25,7 +26,7 @@ public class ProjectUserHoursFacade implements ProjectUserHoursRepository {
     }
 
     @Override
-    public void editProjectUserHours(String username, Integer id, Integer hoursWorked)
+    public ProjectUserHoursDTO editProjectUserHours(String username, Integer id, Integer hoursWorked)
         throws WebApplicationException {
         EntityManager em = emf.createEntityManager();
         try {
@@ -38,6 +39,7 @@ public class ProjectUserHoursFacade implements ProjectUserHoursRepository {
             em.getTransaction().begin();
             projectUserHours.setHoursSpent(projectUserHours.getHoursSpent() + hoursWorked);
             em.getTransaction().commit();
+            return new ProjectUserHoursDTO(projectUserHours);
         } catch (Exception e) {
             throw new WebApplicationException("Unable to edit project user hours");
         } finally {

@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useUser } from "../../context/UserProvider";
 import MyInput from "../../components/MyInput";
+import { useMutation } from "../../hooks/promise";
+import { fetchData, https } from "../../apiUtils";
+import { PROJECT_USER_HOURS } from "../../settings";
+import DisplayError from "../../components/DisplayError";
 
-export default function UserProject({ projects }) {
+export default function UserProject({ projects, run: reFetchProjects }) {
   let { user } = useUser();
   let { projectId } = useParams();
   let [project, setProject] = useState(null);
   let [hoursWorked, setHoursWorked] = useState(0);
+  let { error, run } = useMutation();
 
   useEffect(() => {
     let tmpProject = projects.find(p => Number(p.id) === Number(projectId));
@@ -19,8 +24,18 @@ export default function UserProject({ projects }) {
   }, [projectId, projects, user.username]);
 
   function handleEditHours() {
-    ////////////////////////////////////////////////////////////////////////////////
-    // Do edit hours
+    run(
+      () =>
+        fetchData(
+          PROJECT_USER_HOURS.EDIT_HOURS(projectId, hoursWorked),
+          https.PUT
+        ),
+      {
+        afterRun() {
+          reFetchProjects.current();
+        },
+      }
+    );
   }
 
   return (
@@ -65,6 +80,7 @@ export default function UserProject({ projects }) {
                     value={hoursWorked}
                     onChange={e => setHoursWorked(e.target.value)}
                   />
+                  <DisplayError error={error} />
                   <div className="d-flex" style={{ gap: "5px" }}>
                     <Button
                       variant="secondary"

@@ -16,7 +16,6 @@ export function useMutation() {
   async function run(promise, helpers = getDefaultHelpers()) {
     try {
       let data = await promise();
-      console.log(data);
       setValue(data);
       if (helpers.onSuccess) helpers.onSuccess(data);
     } catch (err) {
