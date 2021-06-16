@@ -22,7 +22,7 @@ export default function AddProject() {
     e.preventDefault();
     run(() => fetchData(PROJECT.ADD_PROJECT, https.POST, values), {
       onSuccess() {
-        reFetchProjects();
+        reFetchProjects.current();
       },
     });
     resetForm();

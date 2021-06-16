@@ -83,6 +83,7 @@ public class User implements Serializable {
     public User(String userName, String userPass) {
         this.userName = userName;
         this.hashPassword = BCrypt.hashpw(userPass, BCrypt.gensalt());
+        this.projectUserHours = new ArrayList<>();
     }
 
     public User(String userName, String email, String phone, Integer billingPerHour) {

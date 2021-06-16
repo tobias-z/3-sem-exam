@@ -104,4 +104,14 @@ public class ProjectUserHours implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return "ProjectUserHours{" +
+            "id=" + id +
+            ", hoursSpent=" + hoursSpent +
+            ", userStory='" + userStory + '\'' +
+            ", description='" + description + '\'' +
+            '}';
+    }
 }

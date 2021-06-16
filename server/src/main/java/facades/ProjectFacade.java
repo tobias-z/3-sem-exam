@@ -6,6 +6,7 @@ import dtos.project.ProjectsDTO;
 import entities.project.Project;
 import entities.project.ProjectRepository;
 import entities.projecthours.ProjectUserHours;
+import entities.projecthours.ProjectUserId;
 import entities.user.User;
 import entities.user.UserAction;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.function.Consumer;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.WebApplicationException;
+import utils.EMF_Creator;
 
 public class ProjectFacade implements ProjectRepository {
 
