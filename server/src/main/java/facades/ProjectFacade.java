@@ -95,7 +95,10 @@ public class ProjectFacade implements ProjectRepository {
         return withUser(username, (user, em) -> {
             Project project = em.find(Project.class, projectId);
             if (project == null) {
-                throw new WebApplicationException("Unable to find project with id: " + projectId);
+                throw new WebApplicationException("Unable to find project with id: " + projectId, 400);
+            }
+            if (project.getUsers().contains(user)) {
+                throw new WebApplicationException("That developer is already on this project", 400);
             }
             em.getTransaction().begin();
             user.addProject(project);

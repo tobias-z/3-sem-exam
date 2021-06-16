@@ -13,7 +13,7 @@ let PROJECT = {
 };
 
 let DEVELOPER = {
-  ALL_DEVELOPERS: `${BASE_URL}/users`,
+  ALL_DEVELOPERS: projectId => `${BASE_URL}/users/${projectId}`,
 };
 
 export { USER, PROJECT, DEVELOPER };

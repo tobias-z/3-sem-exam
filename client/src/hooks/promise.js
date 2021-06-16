@@ -38,9 +38,9 @@ export function useMutation() {
 export function useQuery(url, helpers = getDefaultHelpers()) {
   let [value, setValue] = useState(null);
   let [error, setError] = useState(null);
-  let reRun = useRef();
+  let run = useRef();
 
-  reRun.current = async () => {
+  run.current = async () => {
     try {
       let data = await fetchData(url, https.GET);
       setValue(data);
@@ -53,12 +53,8 @@ export function useQuery(url, helpers = getDefaultHelpers()) {
     }
   };
 
-  function run() {
-    reRun.current();
-  }
-
   useEffect(() => {
-    reRun.current();
+    run.current();
   }, []);
 
   return {

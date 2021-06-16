@@ -2,7 +2,9 @@ package facades;
 
 import dtos.user.DeveloperDTO;
 import dtos.user.UserDTO;
+import entities.project.Project;
 import entities.user.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -33,12 +35,16 @@ public class UserFacade {
         return instance;
     }
 
-    public List<DeveloperDTO> getAllDevelopers() {
+    public List<DeveloperDTO> getAllDevelopersFromProject(int projectId) {
         EntityManager em = emf.createEntityManager();
         try {
             List<User> users = em.createQuery(
-                "SELECT u FROM User u JOIN u.roleList r WHERE r.roleName = :roleName", User.class
-            ).setParameter("roleName", "user").getResultList();
+                "SELECT u FROM User u"
+                    + " JOIN u.roleList r"
+                    + " WHERE r.roleName = :roleName", User.class
+            )
+                .setParameter("roleName", "user")
+                .getResultList();
             return DeveloperDTO.getDevelopersFromUsers(users);
         } catch (Exception e) {
             throw new WebApplicationException("Unable to find any developers");

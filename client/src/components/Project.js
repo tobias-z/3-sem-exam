@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Table } from "react-bootstrap";
+import { Alert, Button, Form, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { fetchData, https } from "../apiUtils";
 import { useProjects } from "../context/ProjectsContext";
@@ -10,15 +10,21 @@ import DisplayError from "./DisplayError";
 export default function Project({ projects }) {
   let { projectId } = useParams();
   let [project, setProject] = useState(null);
-  let { value: developers, error: developerError } = useQuery(
-    DEVELOPER.ALL_DEVELOPERS
-  );
+  let {
+    value: developers,
+    error: developerError,
+    run,
+  } = useQuery(DEVELOPER.ALL_DEVELOPERS(projectId));
 
   useEffect(() => {
     setProject(() =>
       projects.find(project => Number(project.id) === Number(projectId))
     );
   }, [projectId, projects]);
+
+  useEffect(() => {
+    run.current();
+  }, [run]);
 
   return (
     <>
@@ -33,6 +39,7 @@ export default function Project({ projects }) {
             <div>
               {developers && (
                 <AddDeveloperForm
+                  run={run}
                   developers={developers}
                   projectId={projectId}
                 />
@@ -74,7 +81,7 @@ export default function Project({ projects }) {
   );
 }
 
-function AddDeveloperForm({ developers, projectId }) {
+function AddDeveloperForm({ developers, projectId, run: reRun }) {
   let [choosenDeveloper, setChoosenDeveloper] = useState(developers[0].name);
   let { run, error, value } = useMutation();
   let { run: reFetchProjects } = useProjects();
@@ -89,7 +96,8 @@ function AddDeveloperForm({ developers, projectId }) {
         ),
       {
         onSuccess() {
-          reFetchProjects();
+          reRun.current();
+          reFetchProjects.current();
         },
       }
     );
@@ -99,7 +107,12 @@ function AddDeveloperForm({ developers, projectId }) {
   return (
     <>
       <DisplayError error={error} />
-      {value && <pre>{JSON.stringify(value, null, 2)}</pre>}
+      {value && (
+        <Alert variant="success">
+          <h4>Success!</h4>
+          <p>Developer was added to your project</p>
+        </Alert>
+      )}
       <Form onSubmit={handleAddDeveloper}>
         <Form.Group controlId="add-developer-select">
           <Form.Label>Developers available</Form.Label>
